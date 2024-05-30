@@ -1,0 +1,157 @@
+<div class="container w-25 card">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div>
+            <label class="form-label" for="first-name">First name</label>
+            <input class="form-control" id="first-name" type="text" formControlName="firstName"
+                placeholder="First name" />
+
+            <div *ngIf="Form['firstName'].errors && Form['firstName'].touched">
+                <div *ngIf="Form['firstName'].errors['required']" class="text-danger">
+                    First name is required.
+                </div>
+                <div *ngIf="Form['firstName'].errors['maxlength']" class="text-danger">
+                    First name max length is 20.
+                </div>
+                <div *ngIf="Form['firstName'].errors['pattern']" class="text-danger">
+                    Only Arabic and English letters are allowed.
+                </div>
+            </div>
+        </div>
+        <div>
+            <label class="form-label" for="middle-name">Middle name</label>
+            <input class="form-control" id="middle-name" type="text" formControlName="middleName"
+                placeholder="Middle name" />
+
+            <div *ngIf="Form['middleName'].errors && Form['middleName'].touched">
+                <div *ngIf="Form['middleName'].errors['maxlength']" class="text-danger">
+                    Middle name max length is 40.
+                </div>
+                <div *ngIf="Form['middleName'].errors['pattern']" class="text-danger">
+                    Only Arabic and English letters are allowed.
+                </div>
+            </div>
+        </div>
+        <div>
+            <label class="form-label" for="last-name">Last name</label>
+            <input class="form-control" id="last-name" type="text" formControlName="lastName" placeholder="Last name" />
+            <div *ngIf="Form['lastName'].errors && Form['lastName'].touched">
+                <div *ngIf="Form['lastName'].errors['required']" class="text-danger">
+                    Last name is required.
+                </div>
+                <div *ngIf="Form['lastName'].errors['maxlength']" class="text-danger">
+                    Last name max length is 20.
+                </div>
+                <div *ngIf="Form['lastName'].errors['pattern']" class="text-danger">
+                    Only Arabic and English letters are allowed.
+                </div>
+            </div>
+        </div>
+        <div>
+            <label class="form-label" for="birth-date">Birth Date </label>
+            <input class="form-control" id="birth-date" type="date" formControlName="birthDate" />
+            <div *ngIf="Form['birthDate'].errors && Form['birthDate'].touched">
+                <div *ngIf="Form['birthDate'].errors['required']" class="text-danger">
+                    Birth date is required.
+                </div>
+                <div *ngIf="Form['birthDate'].errors['ageInvalid']" class="text-danger">
+                    You must be 20 years old or older.
+                </div>
+            </div>
+        </div>
+        <div>
+            <label class="form-label" for="mobile-number"> Mobile Number </label>
+            <input class="form-control" id="mobile-number" type="tel" formControlName="mobileNumber"
+                placeholder="Mobile number" />
+            <div *ngIf="Form['mobileNumber'].errors && Form['mobileNumber'].touched">
+                <div *ngIf="Form['mobileNumber'].errors['required']" class="text-danger">
+                    Mobile number is required.
+                </div>
+                <div *ngIf="Form['mobileNumber'].errors['pattern']" class="text-danger">
+                    Mobile Number must follow this pattern +021XXXXXXXXXXX.
+                </div>
+            </div>
+        </div>
+        <div>
+            <label class="form-label" for="email"> Email </label>
+            <input class="form-control" id="email" type="email" formControlName="email" placeholder="Email" />
+            <div *ngIf="Form['email'].errors && Form['email'].touched">
+                <div *ngIf="Form['email'].errors['required']" class="text-danger">
+                    Email is required.
+                </div>
+                <div *ngIf="Form['email'].errors['email']" class="text-danger">
+                    Must be an email.
+                </div>
+            </div>
+        </div>
+
+        <div formArrayName="addresses">
+            <div *ngFor="let address of addresses.controls; let i = index" [formGroupName]="i">
+                <div>
+                    <label for="Governate">Governate</label>
+                    <select class="form-select" formControlName="governate" id="governate"
+                        (change)="onGovChange($event, i)">
+                        <option value="" disabled selected>
+                            Select governate
+                        </option>
+                        <option *ngFor="let governate of governates" [value]="governate.id">
+                            {{ governate.governate }}
+                        </option>
+                    </select>
+                    <div *ngIf="address.get('governate')?.touched && address.get('governate')?.invalid">
+                        <div class="text-danger">Governate is required.</div>
+                    </div>
+                </div>
+                <div>
+                    <label for="city">City</label>
+                    <select class="form-select" formControlName="city" id="city" [value]="">
+                        <option value="" disabled selected>
+                            Select city
+                        </option>
+                        <option *ngFor="let city of cities[i]">
+                            {{ city.city }}
+                        </option>
+                    </select>
+                    <div *ngIf="address.get('city')?.touched && address.get('city')?.invalid">
+                        <div class="text-danger">City is required.</div>
+                    </div>
+                </div>
+                <div>
+                    <label class="form-label" for="street">Street</label>
+                    <input class="form-control" formControlName="street" placeholder="Street" />
+                    <div *ngIf="address.get('street')?.touched && address.get('street')?.invalid">
+                        <div class="text-danger">Street is required and max length is 200.</div>
+                    </div>
+                </div>
+                <div>
+                    <label class="form-label" for="buildingNumber">Building number</label>
+                    <input class="form-control" formControlName="buildingNumber" placeholder="Building Number" />
+                    <div *ngIf="address.get('buildingNumber')?.touched && address.get('buildingNumber')?.invalid">
+                        <div class="text-danger">Builidng number is required.</div>
+                    </div>
+                </div>
+                <div>
+                    <label class="form-label" for="flatNumber">Flat number</label>
+                    <input class="form-control" formControlName="flatNumber" placeholder="Flat Number" type="number" />
+                    <div *ngIf="address.get('flatNumber')?.touched && address.get('flatNumber')?.invalid">
+                        <div class="text-danger">Flat number is required.</div>
+                    </div>
+                </div>
+                <div>
+                    <button class="btn btn-danger" type="button" (click)="removeAddress(i)">
+                        Remove Address
+                    </button>
+                    <button class="btn btn-primary m-3" type="button" (click)="addAddress()">
+                        Add Address
+                    </button>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-success" type="submit">Register</button>
+        <div *ngIf="formHasErrors" class="text-danger">
+            Please correct the errors in the form before submitting.
+        </div>
+        <div *ngIf="submitted" class="text-success">
+            You have registered successfully.
+        </div>
+    </form>
+</div>
